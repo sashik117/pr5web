@@ -2,13 +2,16 @@ package org.example.shop.repository;
 
 import org.example.shop.model.Product;
 import org.example.shop.model.Category;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
+import java.util.List;
 
+@Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    Page<Product> findAllByCategory(Category category, Pageable pageable);
-    Page<Product> findByNameContainingIgnoreCase(String name, Pageable pageable);
-// додаткові методи фільтрації можна додати тут
+    // Повертає всі продукти з певної категорії
+    List<Product> findAllByCategory(Category category);
+
+    // Пошук продуктів за назвою (ігноруючи регістр)
+    List<Product> findByNameContainingIgnoreCase(String name);
 }
