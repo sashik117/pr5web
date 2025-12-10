@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Products</title>
+</head>
+<body>
+<h1>Products</h1>
+
+
+<form method="get" action="/products">
+    <input type="text" name="q" placeholder="Пошук" th:value="${q}" />
+    <select name="categoryId">
+        <option value="">Усі категорії</option>
+        <option th:each="c : ${categories}" th:value="${c.id}" th:text="${c.name}" th:selected="${c.id} == ${categoryId}"></option>
+    </select>
+    <button type="submit">Фільтрувати</button>
+</form>
+
+
+<a href="/products/add">Додати продукт</a>
+
+
+<table>
+    <thead>
+    <tr><th>Фото</th><th>Назва</th><th>Ціна</th><th>Категорія</th><th>Дії</th></tr>
+    </thead>
+    <tbody>
+    <tr th:each="p : ${products.content}">
+        <td><img th:src="${p.photo}" alt="photo" width="60"/></td>
+        <td th:text="${p.name}"></td>
+        <td th:text="${p.price}"></td>
+        <td th:text="${p.category != null ? p.category.name : ''}"></td>
+        <td>
+            <a th:href="@{'/products/delete/' + ${p.id}}">Видалити</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+
+<div>
+    <span th:text="'Сторінка ' + ${products.number} + ' з ' + ${products.totalPages}"></span>
+    <div>
+        <a th:if="${products.hasPrevious()}" th:href="@{'/products'(page=${products.number-1}, size=${pageSize}, categoryId=${categoryId}, q=${q})}">Попередня</a>
+        <a th:if="${products.hasNext()}" th:href="@{'/products'(page=${products.number+1}, size=${pageSize}, categoryId=${categoryId}, q=${q})}">Наступна</a>
+    </div>
+</div>
+
+
+</body>
+</html>
